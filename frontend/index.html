@@ -1,0 +1,169 @@
+<!-- Frontend to the website! -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- All CSS design code for the graphic design -->
+    <title>Kowalski</title>
+    <meta charset="UTF-8">
+    <title>Python Backend Button</title>
+        <style>
+        :root {
+            --bg: #f8f9fa;
+            --card-bg: #ffffff;
+            --text: #212529;
+            --accent: #007bff;
+            --border: #e9ecef;
+        }   
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Inter', -apple-system, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background: var(--card-bg);
+            padding: 2.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            width: 100%;
+            max-width: 500px;
+            text-align: center;
+        }
+
+        h1 { font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; }
+
+        button {
+            background-color: var(--accent);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.1s, opacity 0.2s;
+            width: 100%;
+            margin-bottom: 1rem;
+        }
+
+        button:hover { opacity: 0.9; }
+        button:active { transform: scale(0.98); }
+
+        #output {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 1rem;
+            font-family: monospace;
+            font-size: 0.9rem;
+            text-align: left;
+            min-height: 80px;
+        }
+        h2 { 
+        font-size: 0.8rem; 
+        text-transform: uppercase; 
+        letter-spacing: 0.05em; 
+        color: #6c757d; 
+        margin-top: 2rem;
+        }
+        </style>
+</head>
+
+<body>
+    <!-- The title and button are set here -->
+    <div class="container">
+        <h1>Testing in progress...</h1>
+        <button onclick="runScript('first_finch_test')">Run First Finch Test</button>
+
+        <h2>Output:</h2>
+        <pre id="output">Status messages will appear here...</pre>
+        <!-- Just above is the Output: title and the status box that tells us what's going on with the script 
+            Below is the script that connects to the backend! -->
+    </div>
+    <script>
+        async function runScript(endpoint) {
+            const outputElement = document.getElementById('output');
+            outputElement.textContent = `Sending request to /${endpoint}...`;
+
+            try {
+                const response = await fetch(`/${endpoint}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+                const data = await response.json();
+
+                if (data.status === 'success') {
+                    outputElement.textContent = 'Success: ' + data.output;
+                } else {
+                    outputElement.textContent = 'Error: ' + data.message;
+                }
+
+            } catch (error) {
+                outputElement.textContent = 'Network Error: ' + error.message;
+            }
+        }
+    </script>
+    <script>
+        // Keyboard controls, they make the browser look for the events of the key press
+        document.addEventListener('keydown', (event) => {
+            const key = event.key.toLowerCase();
+
+            // Movement via WASD
+            if (["w","a","s","d"].includes(key)) {
+                fetch("/api/move", {
+                    method: "POST",
+                    headers: {"Content-Type": "application/json"},
+                    body: JSON.stringify({direction: key})
+                });
+            }
+
+            // Individual Notes 1-9 
+            if (["1","2","3","4","5","6","7","8","9"].includes(key)) {
+                fetch("/api/note", {
+                    method: "POST",
+                    headers: {"Content-Type": "application/json"},
+                    body: JSON.stringify({key: key})
+                });
+            }
+            
+            // For adding a song to the keyboard function because we dont have a button yet
+            if (["q"].includes(key)) {
+                fetch("/api/songs", {
+                    method: "POST",
+                    headers: {"Content-Type": "application/json"},
+                    body: JSON.stringify({song: key})
+                });
+            }
+
+            // Plays twinkle twinkle for pressing t because we dont have a button for it yet
+            if (["t"].includes(key)) {
+                fetch("/api/songs", {
+                    method: "POST",
+                    headers: {"Content-Type": "application/json"},
+                    body: JSON.stringify({song: key})
+                });
+            }
+        });
+
+        // Stop movement when keys are released
+        document.addEventListener('keyup', (event) => {
+            if (["w","a","s","d"].includes(event.key.toLowerCase())) {
+                fetch("/api/move", {
+                    method: "POST",
+                    headers: {"Content-Type": "application/json"},
+                    body: JSON.stringify({direction: "stop"})
+                });
+            }
+        });
+    </script>
+</body>
+</html>
+
