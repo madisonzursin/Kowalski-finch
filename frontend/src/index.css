@@ -1,0 +1,510 @@
+:root {
+  --text: #6b6375;
+  --text-h: #08060d;
+  --bg: #fff;
+  --border: #e5e4e7;
+  --code-bg: #f4f3ec;
+  --accent: #aa3bff;
+  --accent-bg: rgba(170, 59, 255, 0.1);
+  --accent-border: rgba(170, 59, 255, 0.5);
+  --social-bg: rgba(244, 243, 236, 0.5);
+  --shadow:
+    rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
+
+  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
+  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
+  --mono: ui-monospace, Consolas, monospace;
+
+  font: 18px/145% var(--sans);
+  letter-spacing: 0.18px;
+  color-scheme: light dark;
+  color: var(--text);
+  background: var(--bg);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  @media (max-width: 1024px) {
+    font-size: 16px;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --text: #9ca3af;
+    --text-h: #f3f4f6;
+    --bg: #16171d;
+    --border: #2e303a;
+    --code-bg: #1f2028;
+    --accent: #c084fc;
+    --accent-bg: rgba(192, 132, 252, 0.15);
+    --accent-border: rgba(192, 132, 252, 0.5);
+    --social-bg: rgba(47, 48, 58, 0.5);
+    --shadow:
+      rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
+  }
+
+  #social .button-icon {
+    filter: invert(1) brightness(2);
+  }
+}
+
+#root {
+  width: 1126px;
+  max-width: 100%;
+  margin: 0 auto;
+  text-align: center;
+  border-inline: 1px solid var(--border);
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+h1,
+h2 {
+  font-family: var(--heading);
+  font-weight: 500;
+  color: var(--text-h);
+}
+
+h1 {
+  font-size: 56px;
+  letter-spacing: -1.68px;
+  margin: 32px 0;
+  @media (max-width: 1024px) {
+    font-size: 36px;
+    margin: 20px 0;
+  }
+}
+h2 {
+  font-size: 24px;
+  line-height: 118%;
+  letter-spacing: -0.24px;
+  margin: 0 0 8px;
+  @media (max-width: 1024px) {
+    font-size: 20px;
+  }
+}
+p {
+  margin: 0;
+}
+
+code,
+.counter {
+  font-family: var(--mono);
+  display: inline-flex;
+  border-radius: 4px;
+  color: var(--text-h);
+}
+
+code {
+  font-size: 15px;
+  line-height: 135%;
+  padding: 4px 8px;
+  background: var(--code-bg);
+}
+ /* ── Reset & Base ── */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background: #F1EEFD;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            color: #1a1a5e;
+        }
+
+        /* ── Navigation ── */
+        .site-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 40px;
+            background: #F1EEFD;
+        }
+
+        .site-logo {
+            font-size: 2rem;
+            font-weight: 900;
+            color: #6b5ce7;
+            letter-spacing: -1px;
+            font-style: italic;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 28px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #1a1a5e;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .nav-links a:hover { text-decoration: underline; }
+
+        /* ── Section Banner ── */
+        .section-banner {
+            background: #1a1a5e;
+            color: #fff;
+            text-align: center;
+            padding: 14px 20px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            border-radius: 8px;
+            margin: 0 20px;
+        }
+
+        /* ── Who Is Finch-Alive ── */
+        .who-section {
+            margin: 20px 0 0;
+        }
+
+        .who-content {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            padding: 30px 40px;
+            background: #F1EEFD;
+        }
+
+        .robot-image {
+            width: 220px;
+            height: 180px;
+            object-fit: contain;
+            flex-shrink: 0;
+            border-radius: 12px;
+            background: #d8d0f8;
+        }
+
+        .who-text h2 {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #1a1a5e;
+            margin-bottom: 10px;
+        }
+
+        .who-text p {
+            color: #6b5ce7;
+            font-size: 1rem;
+            line-height: 1.6;
+            font-weight: 500;
+        }
+
+        /* ── Care Section ── */
+        .care-section { margin-top: 30px; }
+
+        .care-intro-card {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            background: #9b8fdb;
+            border-radius: 12px;
+            margin: 20px 20px 0;
+            padding: 20px;
+            min-height: 160px;
+        }
+
+        .duck-image {
+            width: 130px;
+            height: 130px;
+            object-fit: contain;
+            flex-shrink: 0;
+        }
+
+        .care-intro-text {
+            color: #fff;
+            font-size: 1rem;
+            font-weight: 700;
+            text-align: center;
+            line-height: 1.5;
+        }
+
+        .care-intro-text .challenge {
+            margin-top: 12px;
+            font-size: 1.1rem;
+        }
+
+        /* ── Steps ── */
+        .steps-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            padding: 20px;
+        }
+
+        .step-row {
+            display: flex;
+            gap: 16px;
+            align-items: stretch;
+        }
+
+        .step-card {
+            background: #b8aee8;
+            border-radius: 12px;
+            padding: 20px;
+            flex: 1;
+        }
+
+        .step-label {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .step-description {
+            font-size: 0.85rem;
+            color: #fff;
+            line-height: 1.5;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .step-image-box {
+            background: #c8bff0;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex: 1;
+            min-height: 130px;
+            padding: 10px;
+        }
+
+        .step-image-box img {
+            width: 100px;
+            height: 100px;
+            object-fit: contain;
+        }
+
+        /* ── Playtime ── */
+        .playtime-section { margin-top: 30px; }
+
+        .playtime-content {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            padding: 24px 30px;
+            background: #F1EEFD;
+        }
+
+        .wasd-image {
+            width: 150px;
+            height: 120px;
+            object-fit: contain;
+            flex-shrink: 0;
+        }
+
+        .playtime-instructions {
+            flex: 1;
+        }
+
+        .playtime-instructions h3 {
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: #1a1a5e;
+            margin-bottom: 10px;
+        }
+
+        .key-list {
+            list-style: none;
+            font-size: 0.9rem;
+            color: #1a1a5e;
+            line-height: 1.8;
+            font-weight: 500;
+        }
+
+        .key-list li span.key-highlight {
+            font-weight: 800;
+            color: #6b5ce7;
+        }
+
+        .steering-image {
+            width: 90px;
+            height: 90px;
+            object-fit: contain;
+            flex-shrink: 0;
+        }
+
+        /* ── Musical Notes ── */
+        .music-section { margin-top: 30px; }
+
+        .song-cards-row {
+            display: flex;
+            gap: 16px;
+            padding: 20px 20px 0;
+        }
+
+        .song-card {
+            flex: 1;
+            background: #fff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .song-card-image {
+            width: 100%;
+            height: 130px;
+            object-fit: cover;
+        }
+
+        .song-card-body { padding: 14px; }
+
+        .song-title {
+            font-size: 0.95rem;
+            font-weight: 800;
+            color: #1a1a5e;
+            margin-bottom: 6px;
+        }
+
+        .song-description {
+            font-size: 0.8rem;
+            color: #555;
+            line-height: 1.4;
+            margin-bottom: 10px;
+        }
+
+        .play-btn {
+            background: none;
+            border: none;
+            color: #6b5ce7;
+            font-weight: 700;
+            font-size: 0.85rem;
+            cursor: pointer;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .play-btn:hover { text-decoration: underline; }
+
+        /* ── Play Your Own Tune ── */
+        .own-tune-section {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+            padding: 30px 20px 40px;
+            margin-top: 10px;
+        }
+
+        .own-tune-text h2 {
+            font-size: 2.2rem;
+            font-weight: 900;
+            color: #1a1a5e;
+            line-height: 1.15;
+            margin-bottom: 12px;
+        }
+
+        .own-tune-text p {
+            font-size: 0.95rem;
+            color: #1a1a5e;
+            font-weight: 600;
+            line-height: 1.5;
+        }
+
+        .pixel-art-image {
+            width: 220px;
+            height: 180px;
+            object-fit: contain;
+            flex-shrink: 0;
+            border-radius: 12px;
+            background: #1a1a3e;
+        }
+
+        /* ── Debug Panel (kept from original) ── */
+        .debug-panel {
+            background: #fff;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 0 20px 40px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+
+        .debug-panel h2 {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #1a1a5e;
+            margin-bottom: 12px;
+        }
+
+        .run-btn {
+            background: #6b5ce7;
+            color: #fff;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            width: 100%;
+            margin-bottom: 12px;
+            font-size: 0.95rem;
+            transition: opacity 0.2s;
+        }
+
+        .run-btn:hover { opacity: 0.88; }
+
+        .output-label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #6c757d;
+            margin-bottom: 6px;
+        }
+
+        .output-box {
+            background: #F1EEFD;
+            border: 1px solid #d8d0f8;
+            border-radius: 8px;
+            padding: 12px;
+            font-family: monospace;
+            font-size: 0.85rem;
+            min-height: 70px;
+            color: #333;
+        }
+
+        /* ── Decorative dots ── */
+        .dot {
+            border-radius: 50%;
+            background: #6b5ce7;
+            display: inline-block;
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 768px) {
+            .site-nav { padding: 14px 20px; }
+            .site-logo { font-size: 1.4rem; }
+
+            .who-content,
+            .playtime-content,
+            .own-tune-section {
+                flex-direction: column;
+                padding: 20px;
+            }
+
+            .robot-image,
+            .pixel-art-image { width: 100%; height: auto; }
+
+            .step-row { flex-direction: column; }
+
+            .song-cards-row { flex-direction: column; }
+
+            .section-banner { margin: 0 10px; }
+
+            .steps-grid,
+            .care-intro-card,
+            .debug-panel { margin-left: 10px; margin-right: 10px; }
+        }
