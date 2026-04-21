@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us – Finch-Alive</title>
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background: #F1EEFD;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            color: #1a1a5e;
+            min-height: 100vh;
+        }
+
+        .site-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 40px;
+            background: #F1EEFD;
+        }
+
+        .site-logo {
+            font-size: 2rem;
+            font-weight: 900;
+            color: #6b5ce7;
+            letter-spacing: -1px;
+            font-style: italic;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 28px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #1a1a5e;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .nav-links a:hover { text-decoration: underline; }
+
+        .page-banner {
+            background: #1a1a5e;
+            color: #fff;
+            text-align: center;
+            padding: 14px 20px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            border-radius: 8px;
+            margin: 0 20px;
+        }
+
+        .about-content {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .about-card {
+            background: #9b8fdb;
+            border-radius: 16px;
+            padding: 36px;
+            color: #fff;
+            margin-bottom: 24px;
+        }
+
+        .about-card h2 {
+            font-size: 1.6rem;
+            font-weight: 800;
+            margin-bottom: 14px;
+        }
+
+        .about-card p {
+            font-size: 1rem;
+            line-height: 1.7;
+            font-weight: 500;
+        }
+
+        .about-card-light {
+            background: #b8aee8;
+            border-radius: 16px;
+            padding: 36px;
+            color: #fff;
+        }
+
+        .about-card-light h2 {
+            font-size: 1.6rem;
+            font-weight: 800;
+            margin-bottom: 14px;
+        }
+
+        .about-card-light p {
+            font-size: 1rem;
+            line-height: 1.7;
+            font-weight: 500;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin: 20px 20px 40px;
+            color: #6b5ce7;
+            font-weight: 700;
+            text-decoration: none;
+            font-size: 0.95rem;
+        }
+
+        .back-link:hover { text-decoration: underline; }
+
+        @media (max-width: 768px) {
+            .site-nav { padding: 14px 20px; }
+            .site-logo { font-size: 1.4rem; }
+            .about-card, .about-card-light { padding: 24px; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="site-nav">
+        <a class="site-logo" href="index.html">Finch-Alive</a>
+        <ul class="nav-links">
+            <li><a href="about.html" target="_blank">About Us</a></li>
+            <li><a href="download.html" target="_blank">Download</a></li>
+        </ul>
+    </nav>
+
+    <div class="page-banner">About Us</div>
+
+    <div class="about-content">
+        <div class="about-card">
+            <h2>What Is Finch-Alive?</h2>
+            <p>
+                Finch-Alive is an interactive experience built around the Finch robot. Our project lets you connect with
+                Kowalski and explore movement, music, drawing. 
+            </p>
+        </div>
+        <div class="about-card-light">
+            <h2>Our Mission</h2>
+            <p>
+                We are Ashaila, Sama, and Madison. Our group made Finch-Alive for the COSC3810 course at 
+                Marquette University.
+            </p>
+        </div>
+    </div>
+
+    <a class="back-link" href="index.html">&#8592; Back to Home</a>
+</body>
+</html>
