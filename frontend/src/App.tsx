@@ -3,44 +3,45 @@ import { io } from 'socket.io-client'
 
 import './App.css'
 
-const TOTALLY_SECURE_KEY: string = 'meow'
-//const PORT: number = 5555
-const URL: string = 'http://localhost:' + String(TOTALLY_SECURE_KEY)
+const PORT: number = 5555
+const URL: string = 'http://localhost:' + String(PORT)
+const PADDING: string = '25px'
+
 
 function App() {
+    const socket = io(URL, {
+      path: '/socket.io/',
+      transports: ['websocket'],
+    })
+
     const [connected, setConnected] = useState(false)
 
-    useEffect(() => {
-        const socket = io(URL, {
-            path: '/socket.io/',
-            transports: ['websocket'],
+
+    function onConnect() {
+        setConnected(true)
+        console.log('connected!')
+    }
+
+    function onDisconnect() {
+        setConnected(false)
+        console.log('disconnected!')
+    }
+    const handleError = (err: any) => {
+        console.error(err)
+    }
+
+    socket.on('connect', onConnect)
+    socket.on('disconnect', onDisconnect)
+    socket.on('error', (err) => {
+    console.log(err)
         })
 
-        const handleConnect = () => {
-            setConnected(true)
-            console.log('connected!')
-        }
-
-        const handleDisconnect = () => {
-            setConnected(false)
-            console.log('disconnected!')
-        }
-
-        const handleError = (err: any) => {
-            console.error(err)
-        }
-
-        socket.on('connect', handleConnect)
-        socket.on('disconnect', handleDisconnect)
-        socket.on('error', handleError)
-
-        return () => {
-            socket.off('connect', handleConnect)
-            socket.off('disconnect', handleDisconnect)
-            socket.off('error', handleError)
-            socket.disconnect()
-        }
-    }, [])
+        // return () => {
+        //     socket.off('connect', handleConnect)
+        //     socket.off('disconnect', handleDisconnect)
+        //     socket.off('error', handleError)
+        //     socket.disconnect()
+        // }
 
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
