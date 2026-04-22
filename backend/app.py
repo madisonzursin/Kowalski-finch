@@ -1,54 +1,66 @@
 # Script running the website and combining the frontend and backend!
 from time import sleep
-from flask import Flask, render_template, jsonify, request
 import os
 import sys
 import subprocess
-from backend.BirdBrain import Finch
-robot = Finch('A')  # Connect to the Finch robot on port A
+from tracemalloc import stop
+from flask import Flask, render_template, jsonify, request
+from flask_cors import CORS
+from flask_socketio import SocketIO
+from lib.BirdBrain import Finch
+
+TOTALLY_SECURE_KEY = 'meow'
+PORT = 5000
+
+# Connect to the Finch robot on port A
 app = Flask(__name__, template_folder='frontend')
+CORS(app)
 
-#Movement functions
-def move_forward():
-    robot.setMotors(50, 50)
 
-def move_backward():
-    #robot.setMotors(-100, -100)
-    robot.setMotors(-50, -50)
+socketio = SocketIO(cors_allowed_origins='*', transport=['websocket'], ping_interval=3)
 
-def turn_left():
-    robot.setMotors(-50, 50)
 
-def turn_right():
-    robot.setMotors(50, -50)
+try:
+    robot = Finch('A')
+except Exception as e:
+    print(f"Warning: Finch not found on port A: {str(e)}")
+    robot = None
 
-def stop():
-    robot.setMotors(0, 0)
+def stop_bot():
+    if robot:
+        robot.setMottors(0, 0)
+
+@app.route('/')
+def index():
+    return render_template('index.html')
+
 
 #connecting the movement functions to the API endpoints
 @app.route('/api/move', methods=['POST'])
 def move():
+
+    if not robot: return {"status": "error", "message": "Finch not connected"}, 500
+    
     # Reset beak and tail to default positions before moving
+    direction = request.json.get("direction")
     robot.setBeak(0,0,0) 
     robot.setTail("all",0,0,0)
-    direction = request.json.get("direction")
+    
 
     # Checks for obstacles before moving forward
     if direction == "w":
-        distance = robot.getDistance()
-        while distance < 50:
+        #distance = robot.getDistance()
+        if distance < 50:
+            stop.robot.setMotors(0, 0)
             robot.setMotors(0, 0)
             return {"status": "blocked"}
-        else:
-            move_forward()
-    elif direction == "s":
-        move_backward()
+            robot.setMotors(50, 50)
+    elif direction == "s": move_backward()
     elif direction == "a":
         turn_left()
     elif direction == "d":
         turn_right()
-    elif direction == "stop":
-        stop()
+    elif direction == "stop": stop()
     else:
         return {"status": "error", "message": "Invalid direction"}, 400
     return {"status": "success", "action": direction}
@@ -161,6 +173,7 @@ def get_data():
     return jsonify(data)
     # You can return any data here (e.g., from a database)
     # WRITE HERE
+    return jsonify({"status": "success", "message": "Finch moved!"})
 
 # Running our first script!
 @app.route('/first_finch_test', methods=['POST'])
@@ -183,6 +196,49 @@ def first_finch_test():
         return jsonify({"status": "error", "message": f"Server error: {str(e)}"}), 500
 
 
+def configure():
+    app = Flask(__name__)
+    app.config['SECRET_KEY'] = TOTALLY_SECURE_KEY
+    socketio.init_app(app)
+    return app
+
+@socketio.on('connect')
+def test_connect():
+    socketio.emit('connected?')
+
+@socketio.on('disconnect')
+def test_disconnect():
+    socketio.emit('disconnected?')
+
+@socketio.on('finch_test')
+def finch_test():
+    finch = Finch('A')
+    finch.setMove('F', 100, 100)
+    finch.setTurn('R', 360, 30)
+
+
+#Movement functions
+#def move_forward():
+    #robot.setMotors(50, 50)
+
+#def move_backward():
+    #robot.setMotors(-100, -100)
+    #robot.setMotors(-50, -50)
+
+##def turn_left():
+    #robot.setMotors(-50, 50)
+
+#def turn_right():
+    #robot.setMotors(50, -50)
+
+#def stop():
+    #robot.setMotors(0, 0)
+
+
+
+
+
 if __name__ == '__main__':
-    app.run(debug=True)
+    app = configure()
+    socketio.run(app, port=PORT)
 

@@ -8,39 +8,40 @@ const TOTALLY_SECURE_KEY: string = 'meow'
 const URL: string = 'http://localhost:' + String(TOTALLY_SECURE_KEY)
 
 function App() {
+    
+    const socket = io(URL, {
+        path: '/socket.io/',
+        transports: ['websocket'],
+    });
+
     const [connected, setConnected] = useState(false)
 
-    useEffect(() => {
-        const socket = io(URL, {
-            path: '/socket.io/',
-            transports: ['websocket'],
-        })
+    function handleConnect() {
+        setConnected(true)
+        console.log('connected!')
+    }
 
-        const handleConnect = () => {
-            setConnected(true)
-            console.log('connected!')
-        }
+    function handleDisconnect() {
+        setConnected(false)
+        console.log('disconnected!')
+    }
 
-        const handleDisconnect = () => {
-            setConnected(false)
-            console.log('disconnected!')
-        }
 
-        const handleError = (err: any) => {
-            console.error(err)
-        }
+    socket.on('connect', handleConnect)
+    socket.on('disconnect', handleDisconnect)
+    socket.on('error', (err) => {
+        console.log(err)
+    })
 
-        socket.on('connect', handleConnect)
-        socket.on('disconnect', handleDisconnect)
-        socket.on('error', handleError)
+    
+    socket.on('connect', handleConnect);
+    socket.on('disconnect', handleDisconnect);
+    socket.on('error', (err) => {
+        console.log(err)
+    })
 
-        return () => {
-            socket.off('connect', handleConnect)
-            socket.off('disconnect', handleDisconnect)
-            socket.off('error', handleError)
-            socket.disconnect()
-        }
-    }, [])
+   
+
 
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
@@ -85,7 +86,7 @@ function App() {
             document.removeEventListener('keyup', handleKeyUp)
         }
     }, [])
-
+    
     async function runScript(endpoint: string) {
         const outputEl = document.getElementById('output')
         if (!outputEl) return
