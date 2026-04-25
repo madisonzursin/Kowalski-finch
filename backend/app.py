@@ -63,6 +63,7 @@ def stop():
 @socketio.on('move')
 def move(data):
     # Reset beak and tail to default positions before moving
+    direction = request.json.get("direction")
     robot.setBeak(0,0,0) 
     robot.setTail("all",0,0,0)
 
@@ -71,20 +72,18 @@ def move(data):
 
     # Checks for obstacles before moving forward
     if direction == "w":
-        distance = robot.getDistance()
-        while distance < 50:
+        #distance = robot.getDistance()
+        if distance < 50:
+            stop.robot.setMotors(0, 0)
             robot.setMotors(0, 0)
             return {"status": "blocked"}
-        else:
-            move_forward()
-    elif direction == "s":
-        move_backward()
+            robot.setMotors(50, 50)
+    elif direction == "s": move_backward()
     elif direction == "a":
         turn_left()
     elif direction == "d":
         turn_right()
-    elif direction == "stop":
-        stop()
+    elif direction == "stop": stop()
     else:
         return {"status": "error", "message": "Invalid direction"}, 400
     return {"status": "success", "action": direction}
