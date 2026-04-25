@@ -63,22 +63,24 @@ def stop():
 @socketio.on('move')
 def move(data):
     # Reset beak and tail to default positions before moving
-    direction = request.json.get("direction")
+    direction = data.get("direction")
+
     robot.setBeak(0,0,0) 
     robot.setTail("all",0,0,0)
 
-    direction = data.get("direction")
+    distance = robot.getDistance()
 
 
     # Checks for obstacles before moving forward
     if direction == "w":
-        #distance = robot.getDistance()
+        distance = robot.getDistance()
         if distance < 50:
-            stop.robot.setMotors(0, 0)
             robot.setMotors(0, 0)
             return {"status": "blocked"}
-            robot.setMotors(50, 50)
-    elif direction == "s": move_backward()
+        else:
+            move_forward()
+    elif direction == "s": 
+        move_backward()
     elif direction == "a":
         turn_left()
     elif direction == "d":
@@ -179,11 +181,11 @@ def mary():
             robot.playNote(int(i),1.5)
             sleep(0.8)
         elif counter in notePauseList:
-            robot.playNote(int(i),0.8)
-            sleep(1)
+            robot.playNote(int(i),0.6)
+            sleep(0.7)
         else:
-            robot.playNote(int(i),1)
-            sleep(0.8)
+            robot.playNote(int(i),0.5)
+            sleep(0.6)
 
 @socketio.on('boat')
 def boat():
@@ -282,7 +284,7 @@ def twinkle():
             sleep(1.4)
         else:
             robot.playNote(int(i),0.5)
-            sleep(0.8)
+            sleep(0.6)
 
 
 #song endpoint that plays either twinkle twinkle little star in the future will play more songs
