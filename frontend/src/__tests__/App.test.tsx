@@ -1,6 +1,6 @@
 import { render, screen} from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { expect, describe, it, vitest, test} from 'vitest'
+import { expect, describe, vitest, test} from 'vitest'
 import App from '../App'
 
 
