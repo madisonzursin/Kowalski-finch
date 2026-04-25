@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react'
+import {useEffect, useState } from 'react'
 import { io } from 'socket.io-client'
 
 import './App.css'
+import Button from '@mui/material/Button'
 
 const PORT: number = 5555
 const URL: string = 'http://localhost:' + String(PORT)
@@ -9,13 +10,13 @@ const PADDING: string = '25px'
 
 
 function App() {
+
+    
     const socket = io(URL, {
-      path: '/socket.io/',
-      transports: ['websocket'],
+    path: '/socket.io/',
+    transports: ['websocket'],
     })
-
     const [connected, setConnected] = useState(false)
-
 
     function onConnect() {
         setConnected(true)
@@ -29,13 +30,7 @@ function App() {
     const handleError = (err: any) => {
         console.error(err)
     }
-
-    socket.on('connect', onConnect)
-    socket.on('disconnect', onDisconnect)
-    socket.on('error', (err) => {
-    console.log(err)
-        })
-
+    
         // return () => {
         //     socket.off('connect', handleConnect)
         //     socket.off('disconnect', handleDisconnect)
@@ -43,76 +38,56 @@ function App() {
         //     socket.disconnect()
         // }
 
+    
+     // Placeholder for the key variable used in the functions
     useEffect(() => {
-        const handleKeyDown = (e: KeyboardEvent) => {
+        
+        function handleKeyDown(e: KeyboardEvent){
             const key = e.key.toLowerCase()
+            console.log('Key pressed:', key)
 
             if (['w', 'a', 's', 'd'].includes(key)) {
-                fetch('/api/move', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ direction: key }),
-                })
+                socket.emit('move', { direction: key })
             }
 
+            
             if (['1','2','3','4','5','6','7','8','9'].includes(key)) {
-                fetch('/api/note', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ key }),
-                })
+                socket.emit('note', {keynote:key })
+                
             }
 
             if (['q', 't', 'm'].includes(key)) {
-                playSong(key)
+                socket.emit('song', { song: key })
             }
         }
+    
 
         const handleKeyUp = (e: KeyboardEvent) => {
-            if (['w', 'a', 's', 'd'].includes(e.key.toLowerCase())) {
-                fetch('/api/move', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ direction: 'stop' }),
-                })
+            const key = e.key.toLowerCase()
+
+            if (['w', 'a', 's', 'd'].includes(key)) {
+                socket.emit('move', { direction: 'stop' })
             }
         }
 
-        document.addEventListener('keydown', handleKeyDown)
-        document.addEventListener('keyup', handleKeyUp)
+    window.addEventListener('keydown', handleKeyDown)
+    window.addEventListener('keyup', handleKeyUp)
 
-        return () => {
-            document.removeEventListener('keydown', handleKeyDown)
-            document.removeEventListener('keyup', handleKeyUp)
-        }
-    }, [])
-
-    async function runScript(endpoint: string) {
-        const outputEl = document.getElementById('output')
-        if (!outputEl) return
-
-        outputEl.textContent = `Sending request to /${endpoint}...`
-        try {
-            const res = await fetch(`/${endpoint}`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-            })
-            const data = await res.json()
-            outputEl.textContent = data.status === 'success'
-                ? 'Success: ' + data.output
-                : 'Error: ' + data.message
-        } catch (err: any) {
-            outputEl.textContent = 'Network Error: ' + err.message
-        }
+    return () => {
+        window.removeEventListener('keydown', handleKeyDown)
+        window.removeEventListener('keyup', handleKeyUp)
     }
-
-    function playSong(key: string) {
-        fetch('/api/songs', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ song: key }),
+}, [])
+    
+    socket.on('connect', onConnect)
+    socket.on('disconnect', onDisconnect)
+    socket.on('connect_error', (err) => {
+    console.error(err)
+    })
+    
+    socket.on('error', (err) => {
+    console.log(err)
         })
-    }
 
     return (
         <div>
@@ -124,7 +99,10 @@ function App() {
                     <li><a href="download.html">Download</a></li>
                 </ul>
             </nav>
-            <div className="connection-status">Socket status: {connected ? 'Connected' : 'Disconnected'}</div>
+            <div style={{ padding: PADDING }} >
+            
+
+        </div>
 
             {/* ── Who Is Finch-Alive? ── */}
             <section className="who-section">
@@ -139,7 +117,8 @@ function App() {
                         <h2>Hey, I'm Kowalski</h2>
                         <p>
                             I am a finch robot that follows and connects with instruction given code.
-                            You can program me to Move, draw, light up and play music.
+                            You can program me to move, draw, light up and play music.
+                            
                             Pick an activity from down below to explore more of what I can do.
                         </p>
                     </div>
@@ -161,7 +140,7 @@ function App() {
                         <p className="challenge">Are You Down For The Challenge?</p>
                     </div>
                 </div>
-
+            
                 <div className="steps-grid">
                     {/* Step 1 */}
                     <div className="step-row">
@@ -176,7 +155,26 @@ function App() {
                             <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/1f634.svg" alt="Sleeping face emoji" />
                         </div>
                     </div>
-
+                <Button
+                variant='contained'
+                sx={{
+                    backgroundColor: connected ? "#958ce2" : '#dadada',
+                    '&:hover': {
+                    backgroundColor: connected ? "#837ad7" : '#eaeaea'
+                    },
+                    margin: '5px',
+                    padding: '10px 20px',
+                    borderRadius: '10px',
+                    
+                }}
+                onClick={() => {
+                    socket.emit('finch_test')
+                }}
+                
+            >
+                Check if Kowalski is Awake?
+                
+            </Button>
                     {/* Step 2 */}
                     <div className="step-row">
                         <div className="step-image-box">
@@ -257,7 +255,8 @@ function App() {
                         <div className="song-card-body">
                             <p className="song-title">Twinkle Little Star</p>
                             <p className="song-description">Play the lullaby classic that is Twinkle Twinkle Little Star</p>
-                            <button className="playTwinkle-btn" onClick={() => playSong('t')}>Play Twinkle Twinkle &#8594;</button>
+                            <button 
+                            className="play-btn" onClick={() => socket.emit('twinkle')}>Play Twinkle Twinkle &#8594;</button>
                         </div>
                     </div>
                     <div className="song-card">
@@ -270,7 +269,7 @@ function App() {
                         <div className="song-card-body">
                             <p className="song-title">Row Row Your Boat</p>
                             <p className="song-description">Gently down the stream will Kowalski play this tune.</p>
-                            <button className="playRow-btn" onClick={() => playSong('q')}>Play Row Your Boat &#8594;</button>
+                            <button className="play-btn" onClick={() => socket.emit('boat')}>Play Row Your Boat &#8594;</button>
                         </div>
                     </div>
                     <div className="song-card">
@@ -283,7 +282,7 @@ function App() {
                         <div className="song-card-body">
                             <p className="song-title">Mary Had a Little Lamb</p>
                             <p className="song-description">Have Kowalski help Mary find her lamb.</p>
-                            <button className="playMary-btn" onClick={() => playSong('m')}>Play Mary Little Lamb &#8594;</button>
+                            <button className="play-btn" onClick={() => socket.emit('mary')}>Play Mary Little Lamb &#8594;</button>
                         </div>
                     </div>
                 </div>
@@ -292,7 +291,7 @@ function App() {
                 <div className="own-tune-section">
                     <div className="own-tune-text">
                         <h2>Play your own Tune</h2>
-                        <p>Press the numbers in what ever way you want to play a tune all on your own.</p>
+                        <p>Press numbers 1-9 in what ever way you want to play a tune all on your own. </p>
                     </div>
                     <img
                         className="pixel-art-image"
@@ -302,13 +301,6 @@ function App() {
                 </div>
             </section>
 
-            {/* ── Debug / Test Panel ── */}
-            <div className="debug-panel">
-                <h2>Robot Test Console</h2>
-                <button className="run-btn" onClick={() => runScript('first_finch_test')}>Run First Finch Test</button>
-                <p className="output-label">Output:</p>
-                <pre className="output-box" id="output">Status messages will appear here...</pre>
-            </div>
         </div>
     )
 }
